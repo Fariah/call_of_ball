@@ -10,7 +10,7 @@ var ballClass = function(object) {
 
     var ball = object;
 
-    var top, left, direction, speed = 1;
+    var top, left, direction, pixel = 1, speed = 1;
 
     ball.style.top = "100px";
     ball.style.left = "400px";
@@ -30,7 +30,7 @@ var ballClass = function(object) {
         ball.style.top = data.top + "px";
         ball.style.left = data.left + "px";
 
-        animate = setTimeout(setMove,10); // call moveRight in 20msec
+        animate = setTimeout(setMove, speed); // call moveRight in 20msec
     }
     function setStop() {
         clearTimeout(animate);
@@ -46,58 +46,58 @@ var ballClass = function(object) {
         switch (direction) {
             case 'tr':      //top-right
                 if(top < 1 && left < 877) {
-                    result = {top: top - speed, left: left + speed, direction: 'dr'};
+                    result = {top: top - pixel, left: left + pixel, direction: 'dr'};
                 }
                 else if(top < 1 && left > 877) {
-                    result = {top: top - speed, left: left - speed, direction: 'dl'};
+                    result = {top: top - pixel, left: left - pixel, direction: 'dl'};
                 }
                 else if(top < 377 && left > 877) {
-                    result = {top: top + speed, left: left - speed, direction: 'tl'};
+                    result = {top: top + pixel, left: left - pixel, direction: 'tl'};
                 }
                 else {
-                    result = {top: top - speed, left: left + speed, direction: 'tr'};
+                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
                 }
                 break;
             case 'tl':      //top-left
                 if(top < 1 && left > 0) {
-                    result = {top: top + speed, left: left - speed, direction: 'dl'};
+                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
                 }
                 else if(top < 1 && left < 1) {
-                    result = {top: top + speed, left: left + speed, direction: 'dr'};
+                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
                 }
                 else if(top > 0 && left < 1) {
-                    result = {top: top - speed, left: left + speed, direction: 'tr'};
+                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
                 }
                 else {
-                    result = {top: top - speed, left: left - speed, direction: 'tl'};
+                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
                 }
                 break;
             case 'dr':      //down-right
                 if(top > 377 && left < 877) {
-                    result = {top: top - speed, left: left + speed, direction: 'tr'};
+                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
                 }
                 else if(top > 377 && left > 877) {
-                    result = {top: top - speed, left: left - speed, direction: 'tl'};
+                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
                 }
                 else if(top < 377 && left > 877) {
-                    result = {top: top + speed, left: left - speed, direction: 'dl'};
+                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
                 }
                 else {
-                    result = {top: top + speed, left: left + speed, direction: 'dr'};
+                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
                 }
                 break;
             case 'dl':      //down-left
                 if(top > 377 && left > 1) {
-                    result = {top: top - speed, left: left - speed, direction: 'tl'};
+                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
                 }
                 else if(top > 377 && left < 1) {
-                    result = {top: top - speed, left: left + speed, direction: 'tr'};
+                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
                 }
                 else if(top < 377 && left < 1) {
-                    result = {top: top + speed, left: left + speed, direction: 'dr'};
+                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
                 }
                 else {
-                    result = {top: top + speed, left: left - speed, direction: 'dl'};
+                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
                 }
                 break;
         }

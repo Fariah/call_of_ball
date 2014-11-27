@@ -9,37 +9,21 @@
         <!-- Main -->
         <link href="css/main.css" rel="stylesheet" media="screen">
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="//code.jquery.com/jquery.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="js/bootstrap.min.js"></script>
+        <!--<script src="js/bootstrap.min.js"></script>-->
 
-        <!--<script src="js/jquery-1.10.2.min.js"></script>-->
         <script src="js/main.js"></script>
 
         <![endif]-->
         <script>
-//            $(document).ready(function() {
-//                var ball = new ballClass($('#Ball'));
-//                ball.init(); // init controllers
-//                $('#start_button').click(function(){
-//                    var speed = $('#speed').val(); // скорость шара
-//                    ball.move(speed);
-//                });
-//                $('#stop_button').click(function(){
-//                    ball.stop();
-//                });
-//            });
             var ball;
             function startMove() {
-                var speed = document.getElementById('speed').value; // скорость шара
-                ball.move(speed);
+//                var speed = document.getElementById('speed').value; // скорость шара
+                ball.move();
             }
             function stopMove() {
                 ball.stop();
             }
             window.onload = function(){
-//                console.log('js: ', document.getElementById("Ball").style.top);
                 ball = new ballClass(document.getElementById("Ball"));
                 ball.init(); // init controllers
             };
@@ -57,9 +41,9 @@
                 </div>
                 <!--<p class="lead">Развлекаемся шахматами</p>-->
                 <div class="control">
-                    <span>Speed: </span><input type="text" class="input-sm" id="speed" value="">
-                    <input type="button" class="btn-primary" id="start_button" value="start" onclick="startMove()">
-                    <input type="button" class="btn-danger" id="stop_button" value="stop" onclick="stopMove()">
+                    <!--<span>Speed: </span><input type="text" class="input-sm" id="speed" value="">-->
+                    <input type="button" class="btn-primary" id="start_button" value="Faster" onclick="startMove()">
+                    <input type="button" class="btn-danger" id="stop_button" value="Slower" onclick="stopMove()">
                 </div>
             </div>
             <div class="container">
