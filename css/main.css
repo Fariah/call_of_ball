@@ -64,3 +64,17 @@ DESC STYLE
     width: 500px;
     margin: 10px auto;
 }
+.player {
+    width: 15px;
+    height: 60px;
+    border: 1px solid #616161;
+    position: absolute;
+}
+#one {
+    background-color: #038d00;
+    left: 50px;
+}
+#two {
+    background-color: #910001;
+    left: 835px;
+}

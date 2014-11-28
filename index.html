@@ -10,22 +10,24 @@
         <link href="css/main.css" rel="stylesheet" media="screen">
 
         <!--<script src="js/bootstrap.min.js"></script>-->
+        <script src="js/jquery-1.10.2.min"></script>
 
         <script src="js/main.js"></script>
 
         <![endif]-->
         <script>
-            var ball;
+            var ball, player1, player2;
             function startMove() {
-//                var speed = document.getElementById('speed').value; // скорость шара
-                ball.move();
+                var speed = document.getElementById('speed').value; // скорость шара
+                ball.move(speed);
             }
             function stopMove() {
                 ball.stop();
             }
             window.onload = function(){
                 ball = new ballClass(document.getElementById("Ball"));
-                ball.init(); // init controllers
+                players = new playerClass({one: document.getElementById("one"), two: document.getElementById("two")});
+                players.init(); // init controller
             };
         </script>
     </head>
@@ -41,13 +43,15 @@
                 </div>
                 <!--<p class="lead">Развлекаемся шахматами</p>-->
                 <div class="control">
-                    <!--<span>Speed: </span><input type="text" class="input-sm" id="speed" value="">-->
+                    <span>Speed: </span><input disabled type="text" class="input-sm" id="speed" value="">
                     <input type="button" class="btn-primary" id="start_button" value="Faster" onclick="startMove()">
                     <input type="button" class="btn-danger" id="stop_button" value="Slower" onclick="stopMove()">
                 </div>
             </div>
             <div class="container">
                 <div class="board">
+                    <div class="player" id="one"></div>
+                    <div class="player" id="two"></div>
                     <div id="Ball" class="sphere"></div>
                 </div>
             </div>
