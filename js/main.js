@@ -14,33 +14,26 @@ function getCord(str) {
     return parseInt(x);
 }
 
-function checkPlayersBall(ball) {
-    //console.log(ball.style.top);
-    //console.log(pl_1);
-    //console.log(pl_2);
-    var l = getCord(ball.style.left);
-    var t = getCord(ball.style.top);
+function checkPlayersBall(top, left, pixel) {
+
     var pl_1_t = getCord(pl_1.style.top);
-    //var pl_1_l = getCord(pl_1.style.left);
+
     var pl_2_t = getCord(pl_2.style.top);
-    //var pl_2_l = getCord(pl_2.style.left);
-    if(66 > l > 64) {
-        console.log('contact 1');
-        if((pl_1_t-5)+60 > t && t > (pl_1_t-5)) {
-            console.log('contact 2');
-        }
+
+    var result = false;
+
+    if(left < 65 && (top+10 > pl_1_t) && (top+10 < pl_1_t + 58)) {
+        result = pixel;
     }
-    if(816 > l > 814) {
-        console.log('contact 3');
-        if((pl_2_l-5)+60 > t && t > (pl_2_l-5)) {
-            console.log('contact 4');
-        }
+    if(left > 820 && (top+10 > pl_2_t) && (top+10 < pl_2_t + 58)) {
+        result = -pixel;
     }
+    return result;
 }
 
 var playerClass = function(objects) {
 
-    var move_step = 40;
+    var move_step = 4;
     pl_1 = objects.one;
     pl_2 = objects.two;
 
@@ -50,18 +43,10 @@ var playerClass = function(objects) {
     var up_border   = 0;
     var down_border = 339;
 
-    var w = 87;
-    var a = 65;
-    var s = 83;
-    var d = 68;
+    var playerUp_flag, playerDown_flag, playerW_flag, playerS_flag = true;
 
-    var up    = 38;
-    var down  = 40;
-    var left  = 37;
-    var right = 39;
-
-    var duration = 100; // Длительность - 0.1 секунда
-
+    var PlayerUp, PlayerDown, PlayerW, PlayerS;
+    //var playerDown_flag = true;
 
     function check_blockUp(block) {
         if(block > up_border){
@@ -78,29 +63,7 @@ var playerClass = function(objects) {
         }
     }
 
-    function movePlayerW() {
-        var curent_top = getCord(objects.one.style.top);
-        if(check_blockUp(curent_top)) {
-            //$( objects.one ).animate({
-            //    top: curent_top - move_step
-            //}, 300, function() {
-// Animation complete.
-//            });
-            objects.one.style.top = (curent_top - move_step) + "px";
-        }
-        if(getCord(objects.one.style.top) < up_border){
-            objects.one.style.top = up_border + "px";
-        }
-    }
-    function movePlayerS() {
-        var curent_top = getCord(objects.one.style.top);
-        if(check_blockDown(curent_top)) {
-            objects.one.style.top = (curent_top + move_step) + "px";
-        }
-        if(getCord(objects.one.style.top) > down_border){
-            objects.one.style.top = down_border + "px";
-        }
-    }
+
     function movePlayerUp() {
         var curent_top = getCord(objects.two.style.top);
         if(check_blockUp(curent_top)) {
@@ -109,6 +72,11 @@ var playerClass = function(objects) {
         if(getCord(objects.two.style.top) < up_border){
             objects.two.style.top = up_border + "px";
         }
+
+        PlayerUp = setTimeout(movePlayerUp, 10); // call moveRight in 20msec
+    }
+    function stopMovePlayerUp() {
+        clearTimeout(PlayerUp);
     }
     function movePlayerDown() {
         var curent_top = getCord(objects.two.style.top);
@@ -118,24 +86,76 @@ var playerClass = function(objects) {
         if(getCord(objects.two.style.top) > down_border){
             objects.two.style.top = down_border + "px";
         }
+        PlayerDown = setTimeout(movePlayerDown, 10); // call moveRight in 20msec
+    }
+    function stopMovePlayerDown() {
+        clearTimeout(PlayerDown);
+    }
+
+
+    function movePlayerW() {
+        var curent_top = getCord(objects.one.style.top);
+        if(check_blockUp(curent_top)) {
+            objects.one.style.top = (curent_top - move_step) + "px";
+        }
+        if(getCord(objects.one.style.top) > down_border){
+            objects.one.style.top = down_border + "px";
+        }
+        PlayerW = setTimeout(movePlayerW, 10); // call moveRight in 20msec
+    }
+    function stopMovePlayerW() {
+        clearTimeout(PlayerW);
+    }
+    function movePlayerS() {
+        var curent_top = getCord(objects.one.style.top);
+        if(check_blockDown(curent_top)) {
+            objects.one.style.top = (curent_top + move_step) + "px";
+        }
+        if(getCord(objects.one.style.top) > down_border){
+            objects.one.style.top = down_border + "px";
+        }
+        PlayerS = setTimeout(movePlayerS, 10); // call moveRight in 20msec
+    }
+    function stopMovePlayerS() {
+        clearTimeout(PlayerS);
     }
 
     return {
         init: function() {
-
-            $(document).keypress(function( event ) {
-                console.log('event: ', event.key);
-                if(event.key == 'w') {
+            $(document).keydown(function( event ) {
+                if(event.key == 'w' && playerW_flag) {
+                    playerW_flag = false;
                     movePlayerW();
                 }
-                if(event.key == 's') {
+                if(event.key == 's' && playerS_flag) {
+                    playerS_flag = false;
                     movePlayerS();
                 }
-                if(event.key == 'Up') {
+                if(event.key == 'Up' && playerUp_flag) {
+                    playerUp_flag = false;
                     movePlayerUp();
                 }
-                if(event.key == 'Down') {
+                if(event.key == 'Down' && playerDown_flag) {
+                    playerDown_flag = false;
                     movePlayerDown();
+                }
+            });
+            $(document).keyup(function( event ) {
+                if(event.key == 'w') {
+                    playerW_flag = true;
+                    stopMovePlayerW();
+                }
+                if(event.key == 's') {
+                    playerS_flag = true;
+                    stopMovePlayerS();
+                }
+                if(event.key == 'Up') {
+                    playerUp_flag = true;
+                    stopMovePlayerUp();
+                }
+                if(event.key == 'Down') {
+                    playerDown_flag = true;
+                    stopMovePlayerDown();
                 }
             });
         }
@@ -145,7 +165,7 @@ var ballClass = function(object) {
 
     var ball = object;
 
-    var top, left, direction, pixel = 2, speed = 1;
+    var top, left, pixel = 2, pixel_top = 2, pixel_left = 2, speed = 1;
 
     ball.style.top = "100px";
     ball.style.left = "400px";
@@ -154,12 +174,7 @@ var ballClass = function(object) {
         top = getCord(ball.style.top);
         left = getCord(ball.style.left);
 
-        var data = getDirectionData(top, left, direction);
-        direction = data.direction;
-
-        if(checkPlayersBall(ball)) {
-
-        }
+        var data = getDirectionData(top, left);
 
         ball.style.top = data.top + "px";
         ball.style.left = data.left + "px";
@@ -170,70 +185,26 @@ var ballClass = function(object) {
         clearTimeout(animate);
     }
 
-    function getDirectionData(top, left, direction) {
-        var result;
-        if(!direction) {
-            direction = 'dr';
+    function getDirectionData(top, left) {
+
+        if(top < 0) {
+            pixel_top = pixel;
+        } else if(top > 377) {
+            pixel_top = -pixel;
         }
-        switch (direction) {
-            case 'tr':      //top-right
-                if(top < 1 && left < 877) {
-                    result = {top: top - pixel, left: left + pixel, direction: 'dr'};
-                }
-                else if(top < 1 && left > 877) {
-                    result = {top: top - pixel, left: left - pixel, direction: 'dl'};
-                }
-                else if(top < 377 && left > 877) {
-                    result = {top: top + pixel, left: left - pixel, direction: 'tl'};
-                }
-                else {
-                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
-                }
-                break;
-            case 'tl':      //top-left
-                if(top < 1 && left > 0) {
-                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
-                }
-                else if(top < 1 && left < 1) {
-                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
-                }
-                else if(top > 0 && left < 1) {
-                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
-                }
-                else {
-                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
-                }
-                break;
-            case 'dr':      //down-right
-                if(top > 377 && left < 877) {
-                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
-                }
-                else if(top > 377 && left > 877) {
-                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
-                }
-                else if(top < 377 && left > 877) {
-                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
-                }
-                else {
-                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
-                }
-                break;
-            case 'dl':      //down-left
-                if(top > 377 && left > 1) {
-                    result = {top: top - pixel, left: left - pixel, direction: 'tl'};
-                }
-                else if(top > 377 && left < 1) {
-                    result = {top: top - pixel, left: left + pixel, direction: 'tr'};
-                }
-                else if(top < 377 && left < 1) {
-                    result = {top: top + pixel, left: left + pixel, direction: 'dr'};
-                }
-                else {
-                    result = {top: top + pixel, left: left - pixel, direction: 'dl'};
-                }
-                break;
+
+        if(left < 0) {
+            pixel_left = pixel;
+        } else if(left > 877) {
+            pixel_left = -pixel;
         }
-        return result;
+        var check = checkPlayersBall(top, left, pixel);
+
+        if(check !== false) {
+            pixel_left = check;
+        }
+
+        return {top: top + pixel_top, left: left + pixel_left};
     }
 
     return {
